@@ -137,6 +137,8 @@ function getProduct(el) {
   const description = (el) => {
     const dupNode = el.cloneNode(true);
     dupNode.childNodes[0].remove();
+    const l = dupNode.childNodes.length - 1;
+    dupNode.childNodes[l].remove();
 
     for (let i = 0; i < el.children.length; i++) {
       for (let j = 0; j < el.children[i].attributes.length; j++) {
@@ -147,12 +149,12 @@ function getProduct(el) {
   };
 
   return {
-    id: el.querySelector("[data-id]").dataset,
+    id: el.querySelector("[data-id]").dataset.id,
     name: el.querySelector("h1").textContent,
     isLiked: el.querySelector(".like").classList.contains("active"),
     tags: tags,
-    price: price.price,
-    oldPrice: price.oldPrice,
+    price: +price.price,
+    oldPrice: +price.oldPrice,
     discount: price.discount,
     discountPercent: price.discountPercent,
     currency: currency(),
@@ -191,6 +193,7 @@ function getReviews(el) {
       }
       return acc;
     }, 0);
+    const re = /\//g;
     let objReviews = {
       rating: rating,
       author: {
@@ -199,7 +202,7 @@ function getReviews(el) {
       },
       title: reviews[i].querySelector("h3").textContent,
       description: reviews[i].querySelector("p").textContent,
-      date: reviews[i].querySelector(".author i").textContent,
+      date: reviews[i].querySelector(".author i").textContent.replace(re, "."),
     };
 
     arrReviews.push(objReviews);
